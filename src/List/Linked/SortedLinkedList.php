@@ -47,18 +47,21 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
         if ($this->head === null) {
             $this->head = $newNode;
             $this->tail = $newNode;
+            $this->rewind();
             return;
         }
 
         if ($this->comparator->compare($newNode, $this->head) === ComparatorInterface::LOWER) {
             $newNode->mutuallyInterlinkWithNextNode($this->head);
             $this->head = $newNode;
+            $this->rewind();
             return;
         }
 
         if ($this->tail && $newNode->getValue() > $this->tail->getValue()) {
             $this->tail->mutuallyInterlinkWithNextNode($newNode);
             $this->tail = $newNode;
+            $this->rewind();
             return;
         }
 
@@ -79,6 +82,7 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
 
             $currentNode = $nextNode;
         } while (1);
+        $this->rewind();
     }
 
     public function remove(mixed $value): void
@@ -111,6 +115,7 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
             $this->count--;
             break;
         }
+        $this->rewind();
     }
 
     public function clear(): void
@@ -118,6 +123,7 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
         $this->head = null;
         $this->tail = null;
         $this->count = 0;
+        $this->rewind();
     }
 
     public function count(): int
@@ -158,6 +164,7 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
             $this->linkNodeWithClosestNextNodeWithDifferentValue($currentNode);
             $currentNode = $currentNode->getNextNode();
         }
+        $this->rewind();
     }
 
     private function linkNodeWithClosestNextNodeWithDifferentValue(LinkedListNodeInterface $node): void
