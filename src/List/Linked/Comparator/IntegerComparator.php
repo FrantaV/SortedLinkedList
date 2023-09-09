@@ -7,7 +7,7 @@ namespace List\Linked\Comparator;
 use List\Linked\Node\LinkedListIntegerNode;
 use List\Linked\Node\LinkedListNodeInterface;
 
-class IntegerComparator extends AbstractTypeComparator implements ComparatorInterface
+class IntegerComparator extends AbstractTypeComparator
 {
     public function compare(LinkedListNodeInterface $firstNode, LinkedListNodeInterface $secondNode): int
     {

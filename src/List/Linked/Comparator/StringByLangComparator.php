@@ -9,7 +9,7 @@ use List\Linked\Node\LinkedListStringNode;
 use Exception;
 use Collator;
 
-class StringByLangComparator extends AbstractTypeComparator implements ComparatorInterface
+class StringByLangComparator extends AbstractTypeComparator
 {
     private Collator $collator;
 

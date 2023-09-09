@@ -7,7 +7,7 @@ namespace List\Linked\Comparator;
 use List\Linked\Node\LinkedListNodeInterface;
 use List\Linked\Node\LinkedListStringNode;
 
-class StringStrnatcmpComparator extends AbstractTypeComparator implements ComparatorInterface
+class StringStrnatcmpComparator extends AbstractTypeComparator
 {
     public function compare(LinkedListNodeInterface $firstNode, LinkedListNodeInterface $secondNode): int
     {

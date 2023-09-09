@@ -26,7 +26,7 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
     private LinkedListNodeFactoryInterface $nodeFactory;
     private DataTypeCheckerInterface $nodeValueTypeChecker;
     private int $iteratorPosition = 0;
-    private ?LinkedListNodeInterface $iteratorCurrentNode  = null;
+    private ?LinkedListNodeInterface $iteratorCurrentNode = null;
 
     public function __construct(
         ComparatorInterface $comparator,
@@ -44,25 +44,70 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
         $newNode = $this->nodeFactory->create($value);
         $this->count++;
 
+        if ($this->isEmpty()) {
+            $this->initializeNewListUsingNode($newNode);
+            return;
+        }
+
+        if ($this->isLowerThanHeadNode($newNode)) {
+            $this->makeNodeNewHeadNode($newNode);
+            return;
+        }
+
+        if ($this->isGreaterThanTailNode($newNode)) {
+            $this->makeNodeNewTailNode($newNode);
+            return;
+        }
+
+        $this->addNodeToSortedList($newNode);
+    }
+
+    private function initializeNewListUsingNode(LinkedListNodeInterface $newNode): void
+    {
+        $this->head = $newNode;
+        $this->tail = $newNode;
+        $this->rewind();
+    }
+
+    private function isLowerThanHeadNode(LinkedListNodeInterface $newNode): bool
+    {
         if ($this->head === null) {
-            $this->head = $newNode;
-            $this->tail = $newNode;
-            $this->rewind();
-            return;
+            throw new \RuntimeException("Can't compare nodes. Head node isn't set.");
         }
 
-        if ($this->comparator->compare($newNode, $this->head) === ComparatorInterface::LOWER) {
-            $newNode->mutuallyInterlinkWithNextNode($this->head);
-            $this->head = $newNode;
-            $this->rewind();
-            return;
+        return $this->comparator->isSecondValueLower($this->head, $newNode);
+    }
+
+    private function makeNodeNewHeadNode(LinkedListNodeInterface $newNode): void
+    {
+        $newNode->mutuallyInterlinkWithNextNode($this->head);
+        $this->head = $newNode;
+        $this->rewind();
+    }
+
+    private function isGreaterThanTailNode(LinkedListNodeInterface $newNode): bool
+    {
+        if ($this->tail === null) {
+            throw new \RuntimeException("Can't compare nodes. Tail node isn't set.");
+        }
+        return $this->comparator->isSecondValueGreater($this->tail, $newNode);
+    }
+
+    private function makeNodeNewTailNode(LinkedListNodeInterface $newNode): void
+    {
+        if ($this->tail === null) {
+            throw new \RuntimeException("Can't compare nodes. Tail node isn't set.");
         }
 
-        if ($this->tail && $newNode->getValue() > $this->tail->getValue()) {
-            $this->tail->mutuallyInterlinkWithNextNode($newNode);
-            $this->tail = $newNode;
-            $this->rewind();
-            return;
+        $this->tail->mutuallyInterlinkWithNextNode($newNode);
+        $this->tail = $newNode;
+        $this->rewind();
+    }
+
+    private function addNodeToSortedList(LinkedListNodeInterface $newNode): void
+    {
+        if ($this->head === null) {
+            throw new \RuntimeException("Can't compare nodes. Head node isn't set.");
         }
 
         $currentNode = $this->head;
@@ -74,7 +119,7 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
                 break;
             }
 
-            if ($this->comparator->compare($newNode, $nextNode) === ComparatorInterface::LOWER) {
+            if ($this->comparator->isSecondValueLower($nextNode, $newNode)) {
                 $newNode->mutuallyInterlinkWithNextNode($nextNode);
                 $currentNode->mutuallyInterlinkWithNextNode($newNode);
                 break;
@@ -96,10 +141,11 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
             }
 
             $previousNode = $currentNode->getPreviousNode();
-            if ($previousNode === null) {
+            $isNodeHeadNode = $previousNode === null;
+            if ($isNodeHeadNode) {
                 $this->head = $this->head?->getNextNode();
                 $this->count--;
-                if ($this->head === null) {
+                if ($this->isEmpty()) {
                     $this->clear();
                 }
                 break;
@@ -107,8 +153,8 @@ class SortedLinkedList implements SortedLinkedListInterface, Countable, Iterator
 
             $nextNode = $currentNode->getNextNode();
             $previousNode->mutuallyInterlinkWithNextNode($nextNode);
-
-            if ($nextNode === null) {
+            $isNodeTailNode = $nextNode === null;
+            if ($isNodeTailNode) {
                 $this->tail = $previousNode;
             }
 

@@ -13,7 +13,7 @@ abstract class AbstractTypeComparator implements ComparatorInterface
         LinkedListNodeInterface $firstNode,
         LinkedListNodeInterface $secondNode
     ): void {
-        if (!$this->nodesAreValid($firstNode, $secondNode)) {
+        if (!$this->areNodesValid($firstNode, $secondNode)) {
             throw new UnexpectedValueException(
                 'Comparator expected ' . $this->nameOfExpectedClass() . '. ' . get_class($firstNode)
                 . ' and ' . get_class($secondNode) . ' given.'
@@ -21,7 +21,7 @@ abstract class AbstractTypeComparator implements ComparatorInterface
         }
     }
 
-    private function nodesAreValid(LinkedListNodeInterface $firstNode, LinkedListNodeInterface $secondNode): bool
+    private function areNodesValid(LinkedListNodeInterface $firstNode, LinkedListNodeInterface $secondNode): bool
     {
         return $this->isNodeValid($firstNode) && $this->isNodeValid($secondNode);
     }
@@ -30,6 +30,23 @@ abstract class AbstractTypeComparator implements ComparatorInterface
     {
         $expectedTypeOfClass = $this->nameOfExpectedClass();
         return $node instanceof $expectedTypeOfClass;
+    }
+
+    public function isSecondValueGreater(
+        LinkedListNodeInterface $firstValue,
+        LinkedListNodeInterface $secondValue
+    ): bool {
+        return $this->compare($firstValue, $secondValue) === ComparatorInterface::GREATER;
+    }
+
+    public function isSecondValueLower(LinkedListNodeInterface $firstValue, LinkedListNodeInterface $secondValue): bool
+    {
+        return $this->compare($firstValue, $secondValue) === ComparatorInterface::LOWER;
+    }
+
+    public function areValuesEqual(LinkedListNodeInterface $firstValue, LinkedListNodeInterface $secondValue): bool
+    {
+        return $this->compare($firstValue, $secondValue) === ComparatorInterface::EQUAL;
     }
 
     abstract protected function nameOfExpectedClass(): string;

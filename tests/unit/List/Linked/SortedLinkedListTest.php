@@ -74,13 +74,25 @@ final class SortedLinkedListTest extends TestCase
             3,
         ];
 
+        $expectedArray = [
+            2,
+            3,
+            7,
+            12,
+            29,
+            54,
+            98,
+            123,
+            789,
+        ];
+
         foreach ($testValues as $testValue) {
             $sortedLinkedListIntegerType->add($testValue);
         }
 
         $this->assertSame(9, $sortedLinkedListIntegerType->count());
-        $this->assertSame(2, $sortedLinkedListIntegerType->indexOf(7));
-        $this->assertSame(8, $sortedLinkedListIntegerType->indexOf(789));
+        $this->assertSame(array_search(7, $expectedArray), $sortedLinkedListIntegerType->indexOf(7));
+        $this->assertSame(array_search(789, $expectedArray), $sortedLinkedListIntegerType->indexOf(789));
     }
 
     public function testSortingOfStringValues(): void
@@ -98,12 +110,24 @@ final class SortedLinkedListTest extends TestCase
             'Brumla',
         ];
 
+        $expectedArray = [
+            'Achlys',
+            'Brumla',
+            'E.T.',
+            'Gandalf123',
+            'Gandalf12',
+            'Heracles',
+            'Owen Zastava Pitt',
+            'Xena',
+            'Zeus',
+        ];
+
         foreach ($testValues as $testValue) {
             $sortedLinkedListStringType->add($testValue);
         }
         $this->assertSame(9, $sortedLinkedListStringType->count());
-        $this->assertSame(2, $sortedLinkedListStringType->indexOf('E.T.'));
-        $this->assertSame(7, $sortedLinkedListStringType->indexOf('Xena'));
+        $this->assertSame(array_search('E.T.', $expectedArray), $sortedLinkedListStringType->indexOf('E.T.'));
+        $this->assertSame(array_search('Xena', $expectedArray), $sortedLinkedListStringType->indexOf('Xena'));
     }
 
     public function testRemovingIntegerValues(): void
@@ -136,7 +160,15 @@ final class SortedLinkedListTest extends TestCase
             $sortedLinkedListIntegerType->remove($removeValue);
         }
 
-        $this->assertSame(5, $sortedLinkedListIntegerType->count());
+        $expectedArray = [
+            7,
+            12,
+            29,
+            98,
+            123,
+        ];
+
+        $this->assertSame(count($expectedArray), $sortedLinkedListIntegerType->count());
     }
 
     public function testRemovingStringValues(): void
@@ -164,11 +196,19 @@ final class SortedLinkedListTest extends TestCase
             'Zeus',
         ];
 
+        $expectedArray = [
+            'Brumla',
+            'E.T.',
+            'Gandalf12',
+            'Heracles',
+            'Xena',
+        ];
+
         foreach ($removeValues as $removeValue) {
             $sortedLinkedListStringType->remove($removeValue);
         }
 
-        $this->assertSame(5, $sortedLinkedListStringType->count());
+        $this->assertSame(count($expectedArray), $sortedLinkedListStringType->count());
     }
 
     public function testFindValuesWithDuplicity(): void
@@ -186,8 +226,8 @@ final class SortedLinkedListTest extends TestCase
         foreach ($testValues as $testValue) {
             $sortedLinkedListIntegerType->add($testValue);
         }
-        $this->assertSame(7, $sortedLinkedListIntegerType->count());
-        $this->assertSame(4, $sortedLinkedListIntegerType->indexOf(42));
+        $this->assertSame(count($testValues), $sortedLinkedListIntegerType->count());
+        $this->assertSame(array_search(42, $testValues), $sortedLinkedListIntegerType->indexOf(42));
     }
 
     public function testRemoveDuplicates(): void
@@ -206,10 +246,17 @@ final class SortedLinkedListTest extends TestCase
             $sortedLinkedListIntegerType->add($testValue);
         }
 
-        $this->assertSame(7, $sortedLinkedListIntegerType->count());
-        $this->assertSame(4, $sortedLinkedListIntegerType->indexOf(42));
+        $this->assertSame(count($testValues), $sortedLinkedListIntegerType->count());
+        $this->assertSame(array_search(42, $testValues), $sortedLinkedListIntegerType->indexOf(42));
         $sortedLinkedListIntegerType->removeDuplicates();
-        $this->assertSame(3, $sortedLinkedListIntegerType->count());
-        $this->assertSame(2, $sortedLinkedListIntegerType->indexOf(42));
+
+        $expectedValues = [
+            12,
+            15,
+            42,
+        ];
+
+        $this->assertSame(count($expectedValues), $sortedLinkedListIntegerType->count());
+        $this->assertSame(array_search(42, $expectedValues), $sortedLinkedListIntegerType->indexOf(42));
     }
 }

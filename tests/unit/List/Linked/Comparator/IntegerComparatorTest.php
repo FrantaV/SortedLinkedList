@@ -15,7 +15,8 @@ final class IntegerComparatorTest extends TestCase
         $integerNode = new LinkedListIntegerNode(10);
         $greaterNode = new LinkedListIntegerNode(30);
         $comparator = new IntegerComparator();
-        $this->assertSame(ComparatorInterface::LOWER, $comparator->compare($integerNode, $greaterNode));
+        $this->assertSame(ComparatorInterface::GREATER, $comparator->compare($integerNode, $greaterNode));
+        $this->assertTrue($comparator->isSecondValueGreater($integerNode, $greaterNode));
     }
 
     public function testGreaterNumber(): void
@@ -23,7 +24,8 @@ final class IntegerComparatorTest extends TestCase
         $integerNode = new LinkedListIntegerNode(10);
         $lowerNode = new LinkedListIntegerNode(5);
         $comparator = new IntegerComparator();
-        $this->assertSame(ComparatorInterface::GREATER, $comparator->compare($integerNode, $lowerNode));
+        $this->assertSame(ComparatorInterface::LOWER, $comparator->compare($integerNode, $lowerNode));
+        $this->assertTrue($comparator->isSecondValueLower($integerNode, $lowerNode));
     }
 
     public function testEqualNumber(): void
@@ -32,6 +34,7 @@ final class IntegerComparatorTest extends TestCase
         $equalNode = new LinkedListIntegerNode(10);
         $comparator = new IntegerComparator();
         $this->assertSame(ComparatorInterface::EQUAL, $comparator->compare($integerNode, $equalNode));
+        $this->assertTrue($comparator->areValuesEqual($integerNode, $equalNode));
     }
 
     public function testCompareInvalidParamTypeString(): void

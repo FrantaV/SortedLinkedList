@@ -15,15 +15,17 @@ class StringByLangComparatorTest extends TestCase
         $stringNode = new LinkedListStringNode('Řeřicha');
         $greaterNode = new LinkedListStringNode('Zámek');
         $comparator = new StringByLangComparator('cs_CZ');
-        $this->assertSame(ComparatorInterface::LOWER, $comparator->compare($stringNode, $greaterNode));
+        $this->assertSame(ComparatorInterface::GREATER, $comparator->compare($stringNode, $greaterNode));
+        $this->assertTrue($comparator->isSecondValueGreater($stringNode, $greaterNode));
     }
 
     public function testGreaterNumber(): void
     {
         $stringNode = new LinkedListStringNode('Vopice');
-        $lower = new LinkedListStringNode('Vokno');
+        $lowerNode = new LinkedListStringNode('Vokno');
         $comparator = new StringByLangComparator('cs_CZ');
-        $this->assertSame(ComparatorInterface::GREATER, $comparator->compare($stringNode, $lower));
+        $this->assertSame(ComparatorInterface::LOWER, $comparator->compare($stringNode, $lowerNode));
+        $this->assertTrue($comparator->isSecondValueLower($stringNode, $lowerNode));
     }
 
     public function testEqualNumber(): void
@@ -32,6 +34,7 @@ class StringByLangComparatorTest extends TestCase
         $equalNode = new LinkedListStringNode('Žemlovka');
         $comparator = new StringByLangComparator('cs_CZ');
         $this->assertSame(ComparatorInterface::EQUAL, $comparator->compare($stringNode, $equalNode));
+        $this->assertTrue($comparator->areValuesEqual($stringNode, $equalNode));
     }
 
     public function testCompareInvalidParamTypeString(): void

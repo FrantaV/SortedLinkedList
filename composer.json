@@ -9,9 +9,10 @@
         "classmap": ["src"]
     },
     "scripts": {
-        "test-stan": "vendor/bin/phpstan analyse -l 8 src --ansi",
+        "test-stan": "phpstan analyse -l 8 src --ansi",
         "test-codesniffer": "phpcs --standard=PSR12 src",
         "test-phpmd": "phpmd src/ text codesize,unusedcode,naming,controversial,design",
+        "test-unitest": "phpunit --colors=always",
         "test": [
             "@test-stan",
             "@test-codesniffer",

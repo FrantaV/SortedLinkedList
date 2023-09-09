@@ -13,25 +13,28 @@ class StringStrnatcmpComparatorTest extends TestCase
     public function testLowerStringValue(): void
     {
         $stringNode = new LinkedListStringNode('Gandalf5');
-        $greaterValueNode = new LinkedListStringNode('Gandalf125');
+        $greaterNode = new LinkedListStringNode('Gandalf125');
         $comparator = new StringStrnatcmpComparator();
-        $this->assertSame(ComparatorInterface::LOWER, $comparator->compare($stringNode, $greaterValueNode));
+        $this->assertSame(ComparatorInterface::GREATER, $comparator->compare($stringNode, $greaterNode));
+        $this->assertTrue($comparator->isSecondValueGreater($stringNode, $greaterNode));
     }
 
     public function testGreaterStringValue(): void
     {
         $stringNode = new LinkedListStringNode('Gandalf123');
-        $lowerValueNode =  new LinkedListStringNode('Gandalf1');
+        $lowerNode =  new LinkedListStringNode('Gandalf1');
         $comparator = new StringStrnatcmpComparator();
-        $this->assertSame(ComparatorInterface::GREATER, $comparator->compare($stringNode, $lowerValueNode));
+        $this->assertSame(ComparatorInterface::LOWER, $comparator->compare($stringNode, $lowerNode));
+        $this->assertTrue($comparator->isSecondValueLower($stringNode, $lowerNode));
     }
 
     public function testEqualStringValue(): void
     {
         $stringNode = new LinkedListStringNode('Gandalf123');
-        $equalValueNode = new LinkedListStringNode('Gandalf123');
+        $equalNode = new LinkedListStringNode('Gandalf123');
         $comparator = new StringStrnatcmpComparator();
-        $this->assertSame(ComparatorInterface::EQUAL, $comparator->compare($stringNode, $equalValueNode));
+        $this->assertSame(ComparatorInterface::EQUAL, $comparator->compare($stringNode, $equalNode));
+        $this->assertTrue($comparator->areValuesEqual($stringNode, $equalNode));
     }
 
     public function testCompareInvalidParamTypeString(): void
